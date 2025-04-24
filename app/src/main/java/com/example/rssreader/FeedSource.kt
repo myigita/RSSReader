@@ -13,7 +13,7 @@ data class FeedSource(
 
 )
 
-
+@Serializable
 data class FeedTag(
     val name: String = "",
 )
