@@ -13,13 +13,7 @@ import com.example.rssreader.data.FeedSource
 import com.example.rssreader.data.FeedItem
 import okhttp3.ConnectionSpec
 
-// Example RSS feed URL
-val xkcdSource = FeedSource(name = "XKCD", url = "https://xkcd.com/rss.xml")
-val nytSource = FeedSource(name = "NYT Top", url = "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml")
-val bbcSource = FeedSource(name = "BBC", url = "https://feeds.bbci.co.uk/news/rss.xml")
-
-// www.xkcd.com/rss.xml
-suspend fun fetchRss(source: FeedSource = nytSource): List<FeedItem>
+suspend fun fetchRss(source: FeedSource): List<FeedItem>
         = withContext(Dispatchers.IO) {
     val client = OkHttpClient.Builder().connectionSpecs(listOf(ConnectionSpec.MODERN_TLS,
         ConnectionSpec.COMPATIBLE_TLS)).build()
