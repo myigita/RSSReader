@@ -1,4 +1,4 @@
-package com.example.rssreader
+package com.example.rssreader.data
 
 data class FeedItem(
     var title: String = "",

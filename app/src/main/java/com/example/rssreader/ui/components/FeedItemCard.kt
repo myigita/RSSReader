@@ -1,4 +1,4 @@
-package com.example.rssreader
+package com.example.rssreader.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,15 +7,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.rememberAsyncImagePainter
+import com.example.rssreader.SettingsDataStore
+import com.example.rssreader.data.FeedItem
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.compose.runtime.getValue
+
 
 @Composable
 fun FeedItemCard(
@@ -25,6 +31,10 @@ fun FeedItemCard(
     val dimmedAlpha = if (item.isRead) .4f else 1f
     val surface = MaterialTheme.colorScheme.surfaceVariant
     val onSurface = MaterialTheme.colorScheme.onSurface
+
+    val context = LocalContext.current
+    val settingsStore = SettingsDataStore(context)
+    val enableThumbnails by settingsStore.enableThumbnails.collectAsState(initial = true)
 
     ElevatedCard(
         modifier = Modifier
@@ -80,9 +90,11 @@ fun FeedItemCard(
 
             // thumbnail
 
+            if (enableThumbnails
+                && item.thumbnailUrl.isNotBlank()) {
+
             Spacer(Modifier.width(12.dp))
 
-            if (item.thumbnailUrl.isNotBlank()) {
                 Spacer(Modifier.width(8.dp))
                 Image(
                     painter = rememberAsyncImagePainter(item.thumbnailUrl),

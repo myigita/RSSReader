@@ -82,5 +82,7 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
 
 }

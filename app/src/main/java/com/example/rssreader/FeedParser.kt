@@ -9,9 +9,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
-import java.text.SimpleDateFormat
-import java.util.Locale
-import com.example.rssreader.FeedSource
+import com.example.rssreader.data.FeedSource
+import com.example.rssreader.data.FeedItem
 import okhttp3.ConnectionSpec
 
 // Example RSS feed URL

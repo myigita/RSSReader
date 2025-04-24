@@ -1,4 +1,4 @@
-package com.example.rssreader
+package com.example.rssreader.data
 
 import java.util.UUID
 import kotlinx.serialization.Serializable
