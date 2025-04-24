@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">rssreader</string>
+    <string name="fetch_feed">Fetch Feed</string>
+</resources>
