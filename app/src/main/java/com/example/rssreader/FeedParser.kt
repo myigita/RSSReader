@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.example.rssreader.FeedSource
+import okhttp3.ConnectionSpec
 
 // Example RSS feed URL
 val xkcdSource = FeedSource(name = "XKCD", url = "https://xkcd.com/rss.xml")
@@ -21,7 +22,8 @@ val bbcSource = FeedSource(name = "BBC", url = "https://feeds.bbci.co.uk/news/rs
 // www.xkcd.com/rss.xml
 suspend fun fetchRss(source: FeedSource = nytSource): List<FeedItem>
         = withContext(Dispatchers.IO) {
-    val client = OkHttpClient.Builder().build()
+    val client = OkHttpClient.Builder().connectionSpecs(listOf(ConnectionSpec.MODERN_TLS,
+        ConnectionSpec.COMPATIBLE_TLS)).build()
     val request = Request.Builder().url(source.url).build()
 
     try {
@@ -31,7 +33,13 @@ suspend fun fetchRss(source: FeedSource = nytSource): List<FeedItem>
             return@withContext emptyList<FeedItem>()
         }
 
-        val parser = XmlPullParserFactory.newInstance().newPullParser()
+        // security features
+        val factory = XmlPullParserFactory.newInstance()
+        factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false)
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
+
+        val parser = factory.newPullParser()
         parser.setInput(response.body?.charStream())
 
         val result = mutableListOf<FeedItem>()
@@ -89,7 +97,6 @@ suspend fun fetchRss(source: FeedSource = nytSource): List<FeedItem>
         result
     } catch (e: Exception) {
         Log.e("FeedParser", "Error parsing RSS feed: ${e.message}")
-        // Toast
         Toast.makeText(null, "Error parsing RSS feed: ${e.message}", Toast.LENGTH_SHORT).show()
         emptyList<FeedItem>()
     }
